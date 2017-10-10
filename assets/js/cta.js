@@ -77,17 +77,19 @@ $(document).ready(function(){
 		}))
 	}
 
-	function getStops(routeNum){
-		queryCTA("getstops", ("rt="+routeNum), (function(response){
-			var directions = response["bustime-response"].directions;
-			console.log("directions", directions);
-			return directions;
+	function getStops(routeNum, direction){
+		queryCTA("getstops", ("rt="+routeNum+"&dir="+direction), (function(response){
+			var stops = response["bustime-response"].stops;
+			console.log("stops", stops);
+			return stops;
 		}))
 	}
 
+	var stops = getStops(8,"Northbound");
+	console.log(stops);
 	// ctaRoutes();
 
-	// routeDirections("8");
+	routeDirections("8");
 
 
 
