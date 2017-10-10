@@ -48,7 +48,7 @@ $(document).ready(function(){
 		"directions": ["getdirections", "directions"],
 		"stops": ["getstops", "stops"],
 		"predictions": ["getpredictions", "prd"],
-		"bulletins": ["getservicebulletins", "sb"],
+		"bulletins": ["getservicebulletins", "sb"]
 	};
 
 	// console.log(queryParams["routes"]);
@@ -65,7 +65,7 @@ $(document).ready(function(){
 	}
 
 
-	queryCategory("stops", queryParams, "rt=8&dir=North Bound");
+	queryCategory("predictions", queryParams, "stpid=5951&top=5");
 
 
 	//returns an array of (usually 2) objects, each a direction of travel of the route
@@ -87,7 +87,7 @@ $(document).ready(function(){
 
 	var stops = getStops(8,"Northbound");
 	console.log(stops);
-	// ctaRoutes();
+	ctaRoutes();
 
 	routeDirections("8");
 
