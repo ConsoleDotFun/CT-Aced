@@ -91,6 +91,16 @@ $(document).ready(function(){
 
 	routeDirections("8");
 
+	function writeRoutes(){
+		queryCTA("routes", "", (function(response){
+			var routes = response["bustime-response"].routes;
+			console.log("routes", routes);
+			var div = $("<div>").text(routes);
+			$(".container").append(div);
+			return routes;
+		}))
+	}
+	writeRoutes();
 
 
 
