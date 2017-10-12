@@ -1,4 +1,7 @@
+
 $(document).ready(function(){
+
+	var arrayOfRoutes = routes;//global variable in routes.js
 
 	//send a query to the CTA's bus tracker API
 	function queryCTA(queryType, queryParam = "", callback){
@@ -69,11 +72,10 @@ $(document).ready(function(){
 
 
 	//returns an array of (usually 2) objects, each a direction of travel of the route
-	function routeDirections(routeNum){
+	function routeDirections(routeNum, callback){
 		queryCTA("getdirections", ("rt="+routeNum), (function(response){
-			var directions = response["bustime-response"].directions;
-			console.log("directions", directions);
-			return directions;
+			console.log(response);
+			return callback(response);
 		}))
 	}
 
@@ -89,19 +91,40 @@ $(document).ready(function(){
 	console.log(stops);
 	ctaRoutes();
 
-	routeDirections("8");
 
-	function writeRoutes(){
-		queryCTA("routes", "", (function(response){
-			var routes = response["bustime-response"].routes;
-			console.log("routes", routes);
-			var div = $("<div>").text(routes);
-			$(".container").append(div);
-			return routes;
-		}))
+
+	function routesDropdown(routesArray){
+		var dropdown = $("<select required id='route-select'>")
+			.change(function(){
+				console.log("this.val() = ", $(this).val());
+				return directionDropdown($(this).val());
+			});
+		routesArray.forEach(function(route){
+			var optionText = route.rt + "–" + route.rtnm;
+			var option = $("<option>").attr("value", route.rt).text(optionText);
+			$(dropdown).append(option);
+		});
+		$("#route").append(dropdown);
 	}
-	writeRoutes();
+
+	function directionDropdown(routeNumber){
+		console.log("directionDropdown("+routeNumber+") called.");
+		routeDirections(routeNumber, function(response){
+			var directions = response["bustime-response"].dir;
+			console.log("permitted directions = ", directions);
+			var dropdown = $("<select required id='direction-select'>")
+			.change(function(){
+				console.log("this.val() = ", $(this).val());
+				return //directionDropdown($(this).val());
+			});
 
 
+		})
+
+		
+	}
+
+
+	routesDropdown(arrayOfRoutes);
 
 })//end of $(document).ready(function(){}
