@@ -93,7 +93,8 @@ $(document).ready(function(){
 		var dropdown = $("<select required id='route-select' size=6>")
 			.change(function(){
 				$("#stop").empty();
-				console.log("stop = ", $(this).val());
+				console.log("route = ", $(this).val());
+				$("#route-panel-title").html("Select a route");
 				return directionDropdown($(this).val());
 			});
 		routesArray.forEach(function(route){
@@ -120,6 +121,7 @@ $(document).ready(function(){
 				var direction = $(this).val();
 				console.log("this.val() = ", $(this).val());
 				if(direction !== null){
+					$("#route-panel-title").html("Select your stop");
 					return stopsDropdown(routeNumber, direction);
 				}
 			});
