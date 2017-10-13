@@ -1,0 +1,11 @@
+select {
+	size = 7;
+	margin:10px auto 5px auto;
+
+}
+
+panel.panel-default {
+	height:250px;
+	margin-top: 20px;
+}
+
