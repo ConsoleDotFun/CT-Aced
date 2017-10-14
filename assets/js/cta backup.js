@@ -8,29 +8,14 @@ $(document).ready(function(){
 		var queryResult;
 		var language = "en";
 		const apiKey = "j3yumkkQfPsQd2E3GCE3XeEAW";
-		// var queryURL = "http://ctabustracker.com/bustime/api/v2/"+queryType+"?key="+apiKey+"&format=json&locale="+language+"&"+queryParam;
-		var queryURL = "http://ctabustracker.com/bustime/api/v2/"+queryType+"?key=" + apiKey + '&format=json' + "&locale="+language+"&"+'rt=2';
+		var queryURL = "http://ctabustracker.com/bustime/api/v2/"+queryType+"?key="+apiKey+"&format=json&locale="+language+"&"+queryParam;
 		console.log('queryURL', queryURL);
-		// const corsProxyURL = "http://cors-proxy.htmldriven.com/?url=";
-		const corsProxyURL = "";
+		const corsProxyURL = "http://cors-proxy.htmldriven.com/?url=";
 		var url = (corsProxyURL + queryURL);// Used CORS proxy to avoid “No Access-Control-Allow-Origin header”
-		console.log('url', url);
 		//ajax call to API
-
-
 		$.ajax({
 			url: url,
-			method: "GET",
-			// contentType: "application/json; charset=utf-8",
-			// crossDomain: true,
-			headers: {
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Credentials': 'true',
-				'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
-				// 'X-Content-Type-Options': 'nosniff'
-			},
-			// timeout: 15000,
-			// dataType: 'jsonp'
+			method: "GET"
 		}).done(function(response) {
 			callback(response);
 		})
@@ -41,26 +26,26 @@ $(document).ready(function(){
 			console.log("request complete");
 		});
 	}
-
 	function log(response){
+		console.log("request successful");
 		console.log("response", response);
 	}
 
 
-	//queryCTA("getvehicles","rt=22", log);
+	// queryCTA("getvehicles","rt=22", log);
 
 
 	//--------------------------//Utility functions//--------------------------//
 
 	//returns an array of objects, each of which represents one of the bus routes
-	// function ctaRoutes(){
-	// 	console.log("ctaRoutes() called.");
-	// 	queryCTA("getroutes", "", (function(response){
-	// 		var routes = response["bustime-response"].routes;
-	// 		console.log("routes", routes);
-	// 		return routes;
-	// 	}));	
-	// }
+	function ctaRoutes(){
+		console.log("ctaRoutes() called.");
+		queryCTA("getroutes", "", (function(response){
+			var routes = response["bustime-response"].routes;
+			console.log("routes", routes);
+			return routes;
+		}));	
+	}
 
 	queryParams = {
 		"routes": ["getroutes", "routes"],
@@ -72,36 +57,36 @@ $(document).ready(function(){
 
 	// console.log(queryParams["routes"]);
 
-	// function queryCategory(category, paramObject, optionalStr = ""){
-	// 	var q = paramObject[category];
-	// 	console.log("paramObject[category]", q);
-	// 	queryCTA(q[0], optionalStr, (function(response){
-	// 		console.log("q[0]", q[0]);
-	// 		var p = response["bustime-response"][q[1]];
-	// 		console.log(p);
-	// 		return p;
-	// 	}));	
-	// }
+	function queryCategory(category, paramObject, optionalStr = ""){
+		var q = paramObject[category];
+		console.log("paramObject[category]", q);
+		queryCTA(q[0], optionalStr, (function(response){
+			console.log("q[0]", q[0]);
+			var p = response["bustime-response"][q[1]];
+			console.log(p);
+			return p;
+		}));	
+	}
 
 
 	//queryCategory("predictions", queryParams, "stpid=5951&top=5");
 
 
 	//returns an array of (usually 2) objects, each a direction of travel of the route
-	// function routeDirections(routeNum, callback){
-	// 	queryCTA("getdirections", ("rt="+routeNum), (function(response){
-	// 		console.log(response);
-	// 		return callback(response);
-	// 	}))
-	// }
+	function routeDirections(routeNum, callback){
+		queryCTA("getdirections", ("rt="+routeNum), (function(response){
+			console.log(response);
+			return callback(response);
+		}))
+	}
 
-	// function getStops(routeNum, direction){
-	// 	queryCTA("getstops", ("rt="+routeNum+"&dir="+direction), (function(response){
-	// 		var stops = response["bustime-response"].stops;
-	// 		console.log("stops", stops);
-	// 		return stops;
-	// 	}))
-	// }
+	function getStops(routeNum, direction){
+		queryCTA("getstops", ("rt="+routeNum+"&dir="+direction), (function(response){
+			var stops = response["bustime-response"].stops;
+			console.log("stops", stops);
+			return stops;
+		}))
+	}
 
 
 //creates dropdown menu of bus routes from an array of routes
@@ -191,31 +176,31 @@ $(document).ready(function(){
 
 	}
 
-	// function dirTest(queryType, queryParam = "", callback){
-	// 	var queryResult;
-	// 	var language = "en";
-	// 	const apiKey = "j3yumkkQfPsQd2E3GCE3XeEAW";
-	// 	var queryURL = "http://ctabustracker.com/bustime/api/v2/"+queryType+"?key="+apiKey+"&format=json&locale="+language+"&"+queryParam;
-	// 	console.log('queryURL', queryURL);
-	// 	const corsProxyURL = "http://crossorigin.me/";// "http://cors-proxy.htmldriven.com/?url=";
-	// 	var url = corsProxyURL + queryURL;// Used CORS proxy to avoid “No Access-Control-Allow-Origin header”
-	// 	//ajax call to API
-	// 	$.ajax({
-	// 		url: url,
-	// 		method: "GET"
-	// 	}).done(function(response) {
-	// 		callback(response);
-	// 	})
-	// 	.fail(function(error) {
-	// 		console.log("error", error);
-	// 	})
-	// 	.always(function() {
-	// 		console.log("request complete");
-	// 	});
-	// }
+	function dirTest(queryType, queryParam = "", callback){
+		var queryResult;
+		var language = "en";
+		const apiKey = "j3yumkkQfPsQd2E3GCE3XeEAW";
+		var queryURL = "https://ctabustracker.com/bustime/api/v2/"+queryType+"?key="+apiKey+"&format=json&locale="+language+"&"+queryParam;
+		console.log('queryURL', queryURL);
+		const corsProxyURL = "http://cors-proxy.htmldriven.com/?url=";
+		var url = queryURL;// Used CORS proxy to avoid “No Access-Control-Allow-Origin header”
+		//ajax call to API
+		$.ajax({
+			url: url,
+			method: "GET"
+		}).done(function(response) {
+			callback(response);
+		})
+		.fail(function(error) {
+			console.log("error", error);
+		})
+		.always(function() {
+			console.log("request complete");
+		});
+	}
 
-	//dirTest("getdirections", "rt=5", function(response){console.log(response["bustime-response"])});
-	//console.log(ctaRoutes());
+//	dirTest("direction", "rt=5", function(response){console.log(response["bustime-response"])});
+	console.log(ctaRoutes());
 	
 	routesDropdown(arrayOfRoutes);
 
