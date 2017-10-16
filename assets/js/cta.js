@@ -9,11 +9,15 @@ var BusModule = (function(){
 		stpnm      : null
 	}
 
-	const idOfRouteDiv = "#route";
-
+	const idOfRouteDiv = "#routes";
+	const idOfStopsDiv = "#stops";
+	const idOfDirectionsDiv = "#directions";
+	const idOfPanelTitleDiv = "#route-panel-title";
 	//routes is a global variable in routes.js
 	const arrayOfRoutes = routes;
 
+
+	var prefRequest = false;
 	//object to return with public methods
 	var module = {};
 
@@ -24,14 +28,10 @@ var BusModule = (function(){
 		var queryResult;
 		var language = "en";
 		const apiKey = "j3yumkkQfPsQd2E3GCE3XeEAW";
-		// var queryURL = "http://ctabustracker.com/bustime/api/v2/"+queryType+"?key="+apiKey+"&format=json&locale="+language+"&"+queryParam;
 		var queryURL = "http://ctabustracker.com/bustime/api/v2/"+queryType+"?key=" + apiKey + '&format=json' + "&locale="+language+"&"+queryParam;
-		;
 		console.log('queryURL', queryURL);
-		// const corsProxyURL = "http://cors-proxy.htmldriven.com/?url=";
 		const corsProxyURL = "https://cors-anywhere.herokuapp.com/";
-		// const corsProxyURL = "";
-		var url = (corsProxyURL + queryURL);// Used CORS proxy to avoid “No Access-Control-Allow-Origin header”
+		var url = (corsProxyURL + queryURL);// Used CORS proxy to avoid cross origin request issues. Otherwise, Access-Control-Allow-Origin or X-Requested-With request header is needed
 		console.log('url', url);
 		//ajax call to API
 		$.ajax({
@@ -48,25 +48,23 @@ var BusModule = (function(){
 		});
 	}
 
-//creates dropdown menu of bus routes from an array of routes
 
 	module.getPrefs = function(){
-		routesDropdown(arrayOfRoutes);
-		// var prefs = routesDropdown(arrayOfRoutes)[0];
-		// console.log('prefs', prefs);
-		// return prefs;
+		prefRequest = true;
+		return routesDropdown(arrayOfRoutes);
 	}
 
-	var routesDropdown = function(routesArray){
+//creates and displays a dropdown menu of bus routes
+	routesDropdown = function(routesArray){
 		var dropdown = $("<select required id='route-select' size=6>")
-			.change(function(){
-				$("#stop").empty();
+			.change(function(){ //event listener to call directionsDropdown once route is selected
+				$(idOfStopsDiv).empty();
 				var route = $(this).val();
-				console.log("route = ", route);
+				// console.log("route = ", route);
 				currentRequest.routeNumber = route;
-				console.log('currentRequest', currentRequest);
-				$("#route-panel-title").html("Select a route");
-				module.directionDropdown($(this).val());
+				// console.log('currentRequest', currentRequest);
+				$(idOfPanelTitleDiv).html("Select a route");
+				directionsDropdown($(this).val());
 			});
 		routesArray.forEach(function(route){
 			var optionText = route.rt + "–" + route.rtnm;
@@ -76,71 +74,74 @@ var BusModule = (function(){
 		$(idOfRouteDiv).append(dropdown);
 	}
 
-//creates dropdown menu of allowed route directions
-	module.directionDropdown = function(routeNumber){
-		console.log("directionDropdown("+routeNumber+") called.");
+//creates and displays a dropdown menu of allowed route directions
+	directionsDropdown = function(routeNumber){
+		// console.log("directionsDropdown("+routeNumber+") called.");
 		queryCTA("getdirections", ("rt="+routeNumber), (function(response){
-			console.log("response = ", response);
+			// console.log("response = ", response);
 			var directions = response["bustime-response"].directions;
-			console.log("permitted directions = ", directions);
+			// console.log("permitted directions = ", directions);
 			var dropdown = $("<select required id='direction-select'>");
 			dropdown.append($("<option>")
 				.attr("value", null)
 				.text("direction of travel"))
-			//event listener to call stopsDropdown once direction is selected
-			.change(function(){
+			.change(function(){ //event listener to call stopsDropdown once direction is selected
 				var direction = $(this).val();
-				console.log('direction', direction)
+				// console.log('direction', direction)
 				currentRequest.direction = direction;
 				if(direction !== null){
-					$("#route-panel-title").html("Select your stop");
-					module.stopsDropdown(routeNumber, direction);
+					$(idOfPanelTitleDiv).html("Select your stop");
+					stopsDropdown(routeNumber, direction);
 				}
 			});
 		directions.forEach(function(direction){
 			var option = $("<option>").attr("value", direction.dir).text(direction.dir);
 			$(dropdown).append(option);
 		});
-		$("#direction").html(dropdown);
+		$(idOfDirectionsDiv).html(dropdown);
 		}))	
 	}
 
-
-	module.stopsDropdown = function(routeNumber, direction){
-		console.log("stopsDropdown(" + routeNumber + "," + direction + ") called");
+//creates and displays a dropdown menu of bus stops on selected route
+	stopsDropdown = function(routeNumber, direction){
+		// console.log("stopsDropdown(" + routeNumber + "," + direction + ") called");
 		queryCTA("getstops", ("rt="+routeNumber+"&dir="+direction), (function(response){
-			console.log(response);
+			// console.log(response);
 			var stops = response["bustime-response"].stops;
-			console.log("stops = ", stops);
+			// console.log("stops = ", stops);
 			var dropdown = $("<select required id='stop-select' size=6>")
-			.change(function(){
+			.change(function(){ //event listener to call getPredictions once stop is selected
 				var value = $(this).val().split(" ");
 				var stopId = value[0];
 				var stpnm = value.slice(1).join(" ");
-				console.log('stpnm', stpnm);
-				console.log('stopId', stopId);
+				// console.log('stpnm', stpnm);
+				// console.log('stopId', stopId);
 				currentRequest.stopId = stopId;
 				currentRequest.stpnm = stpnm;
-				console.log('currentRequest', currentRequest);
+				//if prefRequest, set preferences
+				if (prefRequest === true) {
+					return currentRequest;
+				}
+				// console.log('currentRequest', currentRequest);
 				module.getPredictions(routeNumber, stopId);
 			});
 		stops.forEach(function(stop){
 			var option = $("<option>").attr("value", stop.stpid + " " + stop.stpnm).text(stop.stpnm);
 			$(dropdown).append(option);
 		});
-		$("#stop").html(dropdown);
+		$(idOfStopsDiv).html(dropdown);
 		}))	
 	}
 
 	module.getPredictions = function(routeNumber, stopId){
-		console.log('getPredictions('+ routeNumber +', '+ stopId+') called.');
+		// console.log('getPredictions('+ routeNumber +', '+ stopId+') called.');
 		var predictions;
 		queryCTA("getpredictions", ("rt="+routeNumber+"&stpid="+stopId), (function(response){
-			console.log("getPredictions response = ", response);
+			// console.log("getPredictions response = ", response);
 			if (response["bustime-response"] === "error"){
 				var error = response["bustime-response"].error[0].msg;
 				console.log('error', error);
-				return routeDisplay(error, true);
+				return [currentRequest, error];
 			} else if (response["bustime-response"] === "prd"){
 				var predictions = response["bustime-response"].prd;
 				console.log("predictions = ", predictions);
@@ -153,8 +154,9 @@ var BusModule = (function(){
 		//display info on screen
 	}
 
-	//--------------------------//Utility functions//--------------------------//
+	return module;
 
+	//--------------------------//Utility functions//--------------------------//
 	//returns an array of objects, each of which represents one of the bus routes
 	// function ctaRoutes(){
 	// 	console.log("ctaRoutes() called.");
@@ -164,7 +166,6 @@ var BusModule = (function(){
 	// 		return routes;
 	// 	}));	
 	// }
-
 	// const queryParams = {
 	// 	"routes": ["getroutes", "routes"],
 	// 	"directions": ["getdirections", "dir"],
@@ -172,8 +173,6 @@ var BusModule = (function(){
 	// 	"predictions": ["getpredictions", "prd"],
 	// 	"bulletins": ["getservicebulletins", "sb"]
 	// };
-
-
 	// function getStops(routeNum, direction){
 	// 	queryCTA("getstops", ("rt="+routeNum+"&dir="+direction), (function(response){
 	// 		var stops = response["bustime-response"].stops;
@@ -185,13 +184,9 @@ var BusModule = (function(){
 	// 	console.log("response", response);
 	// }
 
-
-	//getPrefs();
-	// routesDropdown(arrayOfRoutes);
-	return module;
 }());//end of BusModule
 
-// BusModule.routesDropdown(BusModule.arrayOfRoutes);
+
 BusModule.getPrefs();
 
 
