@@ -116,6 +116,23 @@
     font-weight: 600
 }
 
+.card-header {
+    background-color: #007ac3 !important;
+    color: #fcfdff;
+}
+
+.card-block {
+    background-color: #fcfdff;
+    font-size: 1.25em;
+    font-weight: 600
+}
+
+.card {
+    border: .25em solid #ce1543;
+    opacity: .8;
+    width: 375px;
+}
+
 #busNumber {
     font-size: 2em;
     font-weight: 700;

@@ -1,15 +1,18 @@
-var config = {
-    apiKey: "AIzaSyBoDzxA09zepIWCD9INLvERA63qHwd_oZ4",
-    authDomain: "ct-ace.firebaseapp.com",
-    databaseURL: "https://ct-ace.firebaseio.com",
-    projectId: "ct-ace",
-    storageBucket: "ct-ace.appspot.com",
-    messagingSenderId: "310061683501"
-};
-  firebase.initializeApp(config);
 
-var database = firebase.database();
+//var config = {
+    //apiKey: "AIzaSyBoDzxA09zepIWCD9INLvERA63qHwd_oZ4",
+    //authDomain: "ct-ace.firebaseapp.com",
+    //databaseURL: "https://ct-ace.firebaseio.com",
+    //projectId: "ct-ace",
+    //storageBucket: "ct-ace.appspot.com",
+    //messagingSenderId: "310061683501"
+//};
+  //firebase.initializeApp(config);
 
+//var database = firebase.database();
+
+
+//pulling the current users zipcode
 function zipcode() {
   var zipcode = database.ref().currentUser.zipcode
   return zipcode
