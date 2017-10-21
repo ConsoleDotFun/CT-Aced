@@ -36,14 +36,32 @@ let userPreferences = {};
 
 
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
+    console.log('user', user)
+    console.log("**",user.newUser);
+    if (user !== null) {
         currentUserID = user.uid
         currentUserRef = firebase.database().ref("users/" + currentUserID);
         currentUserRef.once("value")
             .then(function (snapshot) {
                 currentUser = snapshot.val();
-                console.log('currentUser', currentUser);
-                userName = currentUser.displayName;
+                if (snapshot.val() === null) {
+                    currentUser = {
+                        email: user.email,
+                        displayName: user.displayName,
+                        newUser: true
+                    }
+                    console.log('snapshot.val() === null', snapshot.val() === null);
+                    database.ref("users").child(currentUserID).set(currentUser)
+                    main();
+                    $("#welcomeUser").html("Welcome " + currentUser.displayName + "!");
+                    $("#input-modal").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    
+                }else{
+                console.log("welcome back!");
+                }
                 main();
                 if (currentUser.newUser === true) {
                     $("#welcomeUser").html("Welcome " + currentUser.displayName + "!");
@@ -58,6 +76,11 @@ firebase.auth().onAuthStateChanged(function (user) {
         window.location = "index.html"; //redirect if not logged in
     }
 });
+
+
+
+
+
 
 
 
