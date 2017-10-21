@@ -20,10 +20,11 @@ firebase.initializeApp(config);
 
 const database = firebase.database()
 
+firebase.auth().signOut()
 
 
 const uiConfig = {
-    signInSuccessUrl: 'dashboard.html',
+    signInSuccessUrl: 'index.html',
     signInOptions: [
           // Leave the lines as is for the providers you want to offer your users.
           firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -34,7 +35,7 @@ const uiConfig = {
 //          firebase.auth.PhoneAuthProvider.PROVIDER_ID
         ],
     // Terms of service url.
-    tosUrl: '<your-tos-url>'
+    tosUrl: 'https://www.youtube.com/watch?v=sTSA_sWGM44'
 };
 
 // Initialize the FirebaseUI Widget using Firebase.
@@ -44,6 +45,7 @@ ui.start('#firebaseui-auth-container', uiConfig);
 
 
 firebase.auth().onAuthStateChanged(function () {
+
     var user = firebase.auth().currentUser;
     console.log('user', user);
     currentUserID = user.uid
@@ -52,7 +54,6 @@ firebase.auth().onAuthStateChanged(function () {
         database.ref("users").child(user.uid).set({
             email: user.email,
             displayName: user.displayName,
-            newUser: true
         })
     }
 })

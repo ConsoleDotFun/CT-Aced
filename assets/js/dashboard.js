@@ -45,7 +45,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                 console.log('currentUser', currentUser);
                 userName = currentUser.displayName;
                 main();
-                if (currentUser.newUser === true) {
+                if (!currentUser.hasOwnProperty('preferences')) {
                     $("#welcomeUser").html("Welcome " + currentUser.displayName + "!");
                     $("#input-modal").modal({
                         backdrop: 'static',
@@ -55,7 +55,7 @@ firebase.auth().onAuthStateChanged(function (user) {
             })
 
     } else {
-        window.location = "index.html"; //redirect if not logged in
+        window.location = "dashboard.html"; //redirect if not logged in
     }
 });
 
@@ -73,16 +73,19 @@ function main() {
         }
 
         function getBusInfo() {
-            let busInfo = currentUser.preferences.busInfo
+            if (currentUser.hasOwnProperty('preferences')) {
+
+                let busInfo = currentUser.preferences.busInfo
+                if (busInfo === undefined) {
+                    return null;
+                }
+
+                return busInfo;
+                // return busInfo;
+                //should return the busInfo portion of the user's stored preferences (an object)
+            }
             //            database.ref("users").child(currentUserID).child("preferences").on("value", function (snapshot) {
             //                busInfo = snapshot.val().busInfo;
-            if (busInfo === undefined) {
-                return null;
-            }
-
-            return busInfo;
-            // return busInfo;
-            //should return the busInfo portion of the user's stored preferences (an object)
         }
 
         function refreshArrivals(predictions) {
@@ -164,9 +167,6 @@ function main() {
 
         $(document).on("click", "#submitBtn", function () {
             $("#input-modal").modal("toggle")
-            currentUserRef.update({
-                newUser: false
-            });
             database.ref("users").child(currentUserID).child("preferences").set(userPreferences);
             currentUserRef.once("value")
                 .then(function (snapshot) {
@@ -232,11 +232,13 @@ function main() {
             });
         }
 
-        if (currentUser.newUser === false) {
+        if (currentUser.hasOwnProperty('preferences')) {
+
             updateArrivals();
             updateWeather();
             updateNews();
             setTimer(30);
         }
+
     }) //end of long $(document).ready
 } //end of main

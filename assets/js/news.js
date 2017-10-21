@@ -6,6 +6,7 @@ function updateNews() {
     var url = "https://api.everyblock.com/content/chicago/locations/" + zipCode + "/timeline/?token=44e189ef804ebea66865b04bd96fcff657f860cc"
 
     function display(articles) {
+        $("#newsobject").empty();
         for (var i = 0; i < 10; i++) {
             //added this because I was getting an error bc some embed objects were empty
             //this just says, as long as embed is not null or undefined, carry on.
