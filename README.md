@@ -1,5 +1,4 @@
 ![CTA-Dash Logo](assets/images/ctaDash.png)
-Format: ![CTA Dash](url)
 
 
 # CTA - Dash
@@ -16,12 +15,13 @@ CTA-Dash is hosted from our Github page. No installation is required. Please vis
 
  As of 10/21/17, our application is fully supported by Chrome. Due to different browser standards, all other Browsers are currently not supported.
 
- ## Features
+ 
+## Features
 We are in the process of adding new features to the application.
 <br/> <br/>
-Current supported features include:
-* Storing, retrieving and displaying Chicago Bus Routes.
-* Displaying personalized messages with daily quotes.
+Current Supported Features Include:
+* Storing, Retrieving and Displaying Chicago Bus Routes.
+* Displaying Personalized messages with Daily Quotes.
 * Displaying Local News Feed.
 * Changing Stored Preferences.
 
@@ -30,22 +30,22 @@ Current supported features include:
 
 | Built With   | API Used |
 | ------------- | ------------- |
-| [Jquery] - Javascript Magic   | [Chicago CTA]  |
-| [Firebase] - Database and Login Authentication  | [Andruxnet Random Famous Quotes] - Database and Login Authentication  |
-| [Bootstrap] - Website Layout and Modal | [Open Weather] - Website Layout  |
-| [Tether JS]  |   |
+| [Jquery] - JavaScript Magic   | [Chicago CTA] - Our Bus Tracker  |
+| [Firebase] - Database and Login Authentication  | [Andruxnet Random Famous Quotes] - Generates a Random Quote |
+| [Bootstrap] - Website Layout and Modal | [Open Weather] - Retrieves current weather  |
+| [Tether JS] - Library for Making an Absolutely Positioned Element Stay Next to Another Element |   |
 
 
 ## Future Updates
 
 1. Optimize Load times.
-2. Increase cross-browser support.
-3. Create logout functionality.
+2. Increase Cross-browser Support.
+3. Create Logout Functionality.
 4. Password Reset.
-5. Improve mobile experience.
-6. Add train tracker.
-7. Allow multiple train and bus preferences to be stored and retrieved.
-8. Add sms and email notification functionality.
+5. Improve Mobile Experience.
+6. Add Train Tracker.
+7. Allow Multiple Train and Bus Preferences to be Stored and Retrieved.
+8. Add SMS and Email Notification Functionality.
 
 
 ## Built by: Console.Fun(M, D, N, R);
