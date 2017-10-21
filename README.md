@@ -1,4 +1,5 @@
-![CTA-Dash Logo](assets/images/ctaDash.png.png)
+
+![CTA-Dash Logo](assets/images/ctaDash.png)
 Format: ![CTA Dash](url)
 
 # CTA - Dash
@@ -18,7 +19,7 @@ CTA-Dash is hosted from our Github page. No installation is required. Please vis
  ## Features
 
 We are in the process of adding new features to the application.
-Current supported features include:
+<br/> Current supported features include:
 
 * Storing, retrieving and displaying Chicago Bus Routes.
 * Displaying personalized messages with daily quotes.
@@ -27,17 +28,12 @@ Current supported features include:
 
 
 
-## Built With  | ## API Used
------------- | -------------
-
-* [Jquery] - Javascript Magic | * [Chicago CTA] - Javascript Magic
-* [Firebase] - Database and Login Authentication | * [Andruxnet Random Famous Quotes] - Database and Login Authentication
-* [Bootstrap] - Website Layout and Modal | * [Open Weather] - Website Layout
-* [Font Awesome] - Fonts |
-* [Tether JS] - JavaScript library for efficiently making an absolutely positioned element stay next to another element on the page. |
-
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
+| Built With   | API Used |
+| ------------- | ------------- |
+| [Jquery] - Javascript Magic   | [Chicago CTA]  |
+| [Firebase] - Database and Login Authentication  | [Andruxnet Random Famous Quotes] - Database and Login Authentication  |
+| [Bootstrap] - Website Layout and Modal | [Open Weather] - Website Layout  |
+| [Tether JS]  |   |
 
 
 
