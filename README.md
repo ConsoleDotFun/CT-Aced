@@ -1,6 +1,5 @@
 <div style = "background-color: #2A5B8D;">
-  ![CTA-Dash Logo](assets/images/ctaDash.png)
-  Format: ![CTA Dash](url)
+  <img src = "assets/images/ctaDash.png " style = "align="center" alt =" CTA Dash"/>
 </div>
 
 # CTA - Dash
