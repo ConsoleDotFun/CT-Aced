@@ -60,15 +60,9 @@ firebase.auth().onAuthStateChanged(function (user) {
                     });
                     
                 }else{
+
                 console.log("welcome back!");
-                }
                 main();
-                if (currentUser.newUser === true) {
-                    $("#welcomeUser").html("Welcome " + currentUser.displayName + "!");
-                    $("#input-modal").modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
                 }
             })
 
@@ -208,7 +202,7 @@ function main() {
         ////////// Function for determinng the time of the day //////////////////////
 
         function getTime() {
-            var name = userName;
+            var name = currentUser.displayName;
             var data = [
 				[22, 'Working late,'],
 				[18, 'Good evening,'],
