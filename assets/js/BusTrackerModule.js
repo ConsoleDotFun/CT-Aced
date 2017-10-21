@@ -17,8 +17,6 @@ var BusTrackerModule = (function () {
 
     //routes is a global variable in routes.js
     const arrayOfRoutes = routes;
-    // console.log('routes', routes);
-
     //this will help stopsDropdown determine whether to call getPredictions, or just return user preferences
     var prefRequest = false;
     //object to return with public methods
@@ -32,7 +30,6 @@ var BusTrackerModule = (function () {
         var language = "en";
         const apiKey = "j3yumkkQfPsQd2E3GCE3XeEAW";
         var queryURL = "http://ctabustracker.com/bustime/api/v2/" + queryType + "?key=" + apiKey + '&format=json' + "&locale=" + language + "&" + queryParam;
-        // console.log('queryURL', queryURL);
 
         const corsProxyURL = "https://cors-anywhere.herokuapp.com/";
         //-------a couple of other CORS proxies to try if the first fails-------//
@@ -45,14 +42,14 @@ var BusTrackerModule = (function () {
                 url: url,
                 method: "GET",
             }).done(function (response) {
-                console.log(response);
+                // console.log(response);
                 callback(response);
             })
             .fail(function (error) {
                 console.log("error", error);
             })
             .always(function () {
-                console.log("request complete");
+                // console.log("request complete");
             });
     }
 
