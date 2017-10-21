@@ -8,23 +8,23 @@ const validZips = ["60007", "60018", "60068", "60076", "60077", "60106", "60131"
 
 
 
-const config = {
-    apiKey: "AIzaSyBoDzxA09zepIWCD9INLvERA63qHwd_oZ4",
-    authDomain: "ct-ace.firebaseapp.com",
-    databaseURL: "https://ct-ace.firebaseio.com",
-    projectId: "ct-ace",
-    storageBucket: "ct-ace.appspot.com",
-    messagingSenderId: "310061683501"
-}; //Mike's firebase
-
 // const config = {
-//     apiKey: "AIzaSyCivRfgDQux9l4K9QGWsNuMnDy-zD0QAaw",
-//     authDomain: "cta-dash.firebaseapp.com",
-//     databaseURL: "https://cta-dash.firebaseio.com",
-//     projectId: "cta-dash",
-//     storageBucket: "",
-//     messagingSenderId: "195672621360"
-//   };//Dennis' firebase
+//     apiKey: "AIzaSyBoDzxA09zepIWCD9INLvERA63qHwd_oZ4",
+//     authDomain: "ct-ace.firebaseapp.com",
+//     databaseURL: "https://ct-ace.firebaseio.com",
+//     projectId: "ct-ace",
+//     storageBucket: "ct-ace.appspot.com",
+//     messagingSenderId: "310061683501"
+// }; //Mike's firebase
+
+const config = {
+    apiKey: "AIzaSyCivRfgDQux9l4K9QGWsNuMnDy-zD0QAaw",
+    authDomain: "cta-dash.firebaseapp.com",
+    databaseURL: "https://cta-dash.firebaseio.com",
+    projectId: "cta-dash",
+    storageBucket: "",
+    messagingSenderId: "195672621360"
+  };//Dennis' firebase
 
 firebase.initializeApp(config);
 
@@ -40,20 +40,35 @@ let userPreferences = {};
 
 //if a user is logged in, check for newUser to prompt open the input modal. If new user is present, redirect back to login page
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
+    console.log('user', user)
+    console.log("**",user.newUser);
+    if (user !== null) {
         currentUserID = user.uid
         currentUserRef = firebase.database().ref("users/" + currentUserID);
         currentUserRef.once("value")
             .then(function (snapshot) {
                 currentUser = snapshot.val();
-                userName = currentUser.displayName;
-                main();
-                if (currentUser.newUser === true) {
+
+                if (snapshot.val() === null) {
+                    currentUser = {
+                        email: user.email,
+                        displayName: user.displayName,
+                        newUser: true
+                    }
+                    console.log('snapshot.val() === null', snapshot.val() === null);
+                    database.ref("users").child(currentUserID).set(currentUser)
+                    main();
+
                     $("#welcomeUser").html("Welcome " + currentUser.displayName + "!");
                     $("#input-modal").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
+                    
+                }else{
+
+                console.log("welcome back!");
+                main();
                 }
             })
 
@@ -61,6 +76,11 @@ firebase.auth().onAuthStateChanged(function (user) {
         window.location = "dashboard.html"; //redirect if not logged in
     }
 });
+
+
+
+
+
 
 
 
@@ -141,6 +161,12 @@ function main() {
             //validate zipcode, store it, and then proceed to collectBysData();
             if (validZips.indexOf($("#zipCode").val()) > -1) {
                 userPreferences.zipCode = $("#zipCode").val();
+
+                console.log('userPreferences', userPreferences);
+
+                //add code to modify display name here?
+                //ask if they want to use default? 
+
                 collectBusData();
 
             } else {
@@ -173,8 +199,9 @@ function main() {
             currentUserRef.update({
                 newUser: false
             });
-            //preferences are updated on first base and then the local currentUser object is update, and finally the appropreite api calls are made
-            database.ref("users").child(currentUserID).child("preferences").set(userPreferences);
+
+            database.ref("users").child(currentUserID).child("preferences").update(userPreferences);
+
             currentUserRef.once("value")
                 .then(function (snapshot) {
                     currentUser = snapshot.val();
@@ -190,7 +217,7 @@ function main() {
         ////////// Function for determinng the time of the day //////////////////////
 
         function getTime() {
-            var name = userName;
+            var name = currentUser.displayName;
             var data = [
 				[22, 'Working late,'],
 				[18, 'Good evening,'],

@@ -17,8 +17,6 @@ var BusTrackerModule = (function () {
 
     //routes is a global variable in routes.js
     const arrayOfRoutes = routes;
-    // console.log('routes', routes);
-
     //this will help stopsDropdown determine whether to call getPredictions, or just return user preferences
     var prefRequest = false;
     //object to return with public methods
@@ -32,7 +30,6 @@ var BusTrackerModule = (function () {
         var language = "en";
         const apiKey = "j3yumkkQfPsQd2E3GCE3XeEAW";
         var queryURL = "http://ctabustracker.com/bustime/api/v2/" + queryType + "?key=" + apiKey + '&format=json' + "&locale=" + language + "&" + queryParam;
-        // console.log('queryURL', queryURL);
 
         const corsProxyURL = "https://cors-anywhere.herokuapp.com/";
         //-------a couple of other CORS proxies to try if the first fails-------//
@@ -45,14 +42,14 @@ var BusTrackerModule = (function () {
                 url: url,
                 method: "GET",
             }).done(function (response) {
-                console.log(response);
+                // console.log(response);
                 callback(response);
             })
             .fail(function (error) {
                 console.log("error", error);
             })
             .always(function () {
-                console.log("request complete");
+                // console.log("request complete");
             });
     }
 
@@ -111,7 +108,6 @@ var BusTrackerModule = (function () {
     function stopsDropdown(routeNumber, direction, optionalCallback = null) {
         $(idOfPanelTitleDiv).html("<h5>Bus Preferences</h5><h3>Select Stop</h3>");
         $(idOfDropdownDiv).empty();
-        // console.log("optionalCallback passed to stopsDropdown", optionalCallback);
         queryCTA("getstops", ("rt=" + routeNumber + "&dir=" + direction), (function (response) {
             var stops = response["bustime-response"].stops;
             var firstOption = $("<option>").attr("value", null).text("-  bus stop  -");
@@ -126,13 +122,9 @@ var BusTrackerModule = (function () {
                     //if prefRequest, set preferences
                     if (prefRequest === true && optionalCallback) {
                         prefRequest = false;
-                        // console.log('prefRequest === true');
-                        // console.log("optionalCallback was passed currentRequest", optionalCallback);
                         return optionalCallback(currentRequest);
                     }else{//else is 
-                    // console.log('currentRequest', currentRequest);
                     module.getPredictions(routeNumber, stopId, optionalCallback);
-                    // console.log('optionalCallback', optionalCallback)
                     }
                 });
             stops.forEach(function (stop) {
@@ -154,10 +146,8 @@ var BusTrackerModule = (function () {
 
     //returns an array of objects, each of which represents one of the bus routes
     function ctaRoutes() {
-        // console.log("ctaRoutes() called.");
         queryCTA("getroutes", "", (function (response) {
             var routes = response["bustime-response"].routes;
-            // console.log("routes", routes);
             return routes;
         }));
     }
@@ -177,7 +167,6 @@ var BusTrackerModule = (function () {
                 }
             } else {
                 var error = predictionsResponse.error;
-                // console.log('error', error);
 
                     return optionalCallback(["error", error, currentRequest]);
 
@@ -188,7 +177,6 @@ var BusTrackerModule = (function () {
     //returns the currentRequest object containing the selected route, direction and stop info
     module.getPrefs = function (callback) {
         prefRequest = true;
-        // console.log('arrayOfRoutes', arrayOfRoutes);
         return routesDropdown(arrayOfRoutes, callback);
     }
 
