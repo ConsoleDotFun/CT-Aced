@@ -169,7 +169,7 @@ function main() {
             currentUserRef.update({
                 newUser: false
             });
-            database.ref("users").child(currentUserID).child("preferences").set(userPreferences);
+            database.ref("users").child(currentUserID).child("preferences").update(userPreferences);
             currentUserRef.once("value")
                 .then(function (snapshot) {
                     currentUser = snapshot.val();
