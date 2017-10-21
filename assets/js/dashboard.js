@@ -49,7 +49,7 @@ firebase.auth().onAuthStateChanged(function (user) {
             .then(function (snapshot) {
                 currentUser = snapshot.val();
 
-                if (snapshot.val() === null) {
+                if (currentUser === null || currentUser.newUser === true) {
                     currentUser = {
                         email: user.email,
                         displayName: user.displayName,
