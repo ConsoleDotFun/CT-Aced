@@ -48,6 +48,10 @@ firebase.auth().onAuthStateChanged(function () {
     console.log('user', user);
     currentUserID = user.uid
     console.log("currentUserID = ", currentUserID);
+    database.ref("users").child(user.uid).once(function(snapshot){
+        console.log("*"snapshot.val());
+
+    })
     if (user != null) {
         database.ref("users").child(user.uid).set({
             email: user.email,
