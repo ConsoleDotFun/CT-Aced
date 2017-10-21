@@ -1,6 +1,6 @@
-<div style = "background-color: #2A5B8D;">
-  <img src = "assets/images/ctaDash.png " style = "align="center" alt =" CTA Dash"/>
-</div>
+![CTA-Dash Logo](assets/images/ctaDash.png)
+Format: ![CTA Dash](url)
+
 
 # CTA - Dash
 
@@ -17,16 +17,16 @@ CTA-Dash is hosted from our Github page. No installation is required. Please vis
  As of 10/21/17, our application is fully supported by Chrome. Due to different browser standards, all other Browsers are currently not supported.
 
  ## Features
-
 We are in the process of adding new features to the application.
-<br/> Current supported features include:
-
+<br/> <br/>
+Current supported features include:
 * Storing, retrieving and displaying Chicago Bus Routes.
 * Displaying personalized messages with daily quotes.
 * Displaying Local News Feed.
 * Changing Stored Preferences.
 
 
+## Technologies
 
 | Built With   | API Used |
 | ------------- | ------------- |
@@ -34,7 +34,6 @@ We are in the process of adding new features to the application.
 | [Firebase] - Database and Login Authentication  | [Andruxnet Random Famous Quotes] - Database and Login Authentication  |
 | [Bootstrap] - Website Layout and Modal | [Open Weather] - Website Layout  |
 | [Tether JS]  |   |
-
 
 
 ## Future Updates
