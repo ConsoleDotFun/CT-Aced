@@ -1,5 +1,7 @@
+// used to reset modal on preferences update
 const resetModal = "<div class='modal-dialog'><div class='modal-content'><div class='modal-header' id='modalText'><h3>Please Enter Zip Code for Weather Updates</h3></div><div class='modal-body'><form role='form'><div class='form-group' id='dropDowns'><input type='text' class='form-control' id='zipCode' placeholder='6-digit zip'></div><button class='btn btn-default btn-block' id='nextBtn'>Next</button></form></div></div></div>"
 
+// used to valid zip codes
 const validZips = ["60007", "60018", "60068", "60076", "60077", "60106", "60131", "60171", "60176", "60189", "60201", "60202", "60301", "60302", "60304", "60305", "60406", "60419", "60440", "60453", "60456", "60459", "60501", "60504", "60515", "60517", "60532", "60540", "60555", "60563", "60564", "60565", "60585", "60601", "60602", "60603", "60604", "60605", "60606", "60607", "60608", "60609", "60610", "60611", "60612", "60613", "60614", "60615", "60616", "60617", "60618", "60619", "60620", "60621", "60622", "60623", "60624", "60625", "60626", "60628", "60629", "60630", "60631", "60632", "60633", "60634", "60635", "60636", "60637", "60638", "60639", "60640", "60641", "60642", "60643", "60644", "60645", "60646", "60647", "60649", "60651", "60652", "60653", "60654", "60655", "60656", "60657", "60659", "60660", "60661", "60666", "60674", "60690", "60699", "60706", "60707", "60712", "60714", "60803", "60804", "60805", "60827"
 ]
 
@@ -35,6 +37,8 @@ let userName;
 let userPreferences = {};
 
 
+
+//if a user is logged in, check for newUser to prompt open the input modal. If new user is present, redirect back to login page
 firebase.auth().onAuthStateChanged(function (user) {
     console.log('user', user)
     console.log("**",user.newUser);
@@ -44,6 +48,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         currentUserRef.once("value")
             .then(function (snapshot) {
                 currentUser = snapshot.val();
+
                 if (snapshot.val() === null) {
                     currentUser = {
                         email: user.email,
@@ -53,6 +58,7 @@ firebase.auth().onAuthStateChanged(function (user) {
                     console.log('snapshot.val() === null', snapshot.val() === null);
                     database.ref("users").child(currentUserID).set(currentUser)
                     main();
+
                     $("#welcomeUser").html("Welcome " + currentUser.displayName + "!");
                     $("#input-modal").modal({
                         backdrop: 'static',
@@ -67,7 +73,7 @@ firebase.auth().onAuthStateChanged(function (user) {
             })
 
     } else {
-        window.location = "index.html"; //redirect if not logged in
+        window.location = "dashboard.html"; //redirect if not logged in
     }
 });
 
@@ -82,6 +88,8 @@ function main() {
     $(document).ready(function () {
         quoteGenerator();
 
+
+        //update weather and bus trackers live, every x seconds
         function setTimer(nSeconds) {
             let timer = setInterval(function () {
                 updateWeather();
@@ -91,8 +99,6 @@ function main() {
 
         function getBusInfo() {
             let busInfo = currentUser.preferences.busInfo
-            //            database.ref("users").child(currentUserID).child("preferences").on("value", function (snapshot) {
-            //                busInfo = snapshot.val().busInfo;
             if (busInfo === undefined) {
                 return null;
             }
@@ -151,21 +157,27 @@ function main() {
 
         $(document).on("click", "#nextBtn", function (e) {
             e.preventDefault();
+
+            //validate zipcode, store it, and then proceed to collectBysData();
             if (validZips.indexOf($("#zipCode").val()) > -1) {
                 userPreferences.zipCode = $("#zipCode").val();
+
                 console.log('userPreferences', userPreferences);
 
                 //add code to modify display name here?
                 //ask if they want to use default? 
+
                 collectBusData();
 
             } else {
+                //zip validation error
                 $("#modalText").empty()
                     .html("Please Enter A Valid Chicago Area Zip Code")
 
             }
         });
 
+        //reset modal to reenter preferences
         $("#changeSettingsCog").on("click", function () {
             $("#input-modal").empty()
                 .append(resetModal)
@@ -181,12 +193,15 @@ function main() {
             userPreferences.busInfo = response;
         }
 
+        //on first submit of preferences, newUser is updated to false
         $(document).on("click", "#submitBtn", function () {
             $("#input-modal").modal("toggle")
             currentUserRef.update({
                 newUser: false
             });
+
             database.ref("users").child(currentUserID).child("preferences").update(userPreferences);
+
             currentUserRef.once("value")
                 .then(function (snapshot) {
                     currentUser = snapshot.val();
@@ -215,9 +230,7 @@ function main() {
 
             for (var i = 0; i < data.length; i++) {
                 if (hr >= data[i][0]) {
-                    //                    if ($(window).width() < 376) {
-                    //                        $("#greeting-div").html(data[i][1] + "<br>" + name + "!");
-                    //                    } else {
+                    //set greetings into to seperate 'display: block' p tags to prevent word wrap and splitting of first and last name
                     $("#greeting-div").html("<p>" + data[i][1] +
                         "</p>&nbsp<p>" + name + "!</p");
                     break;
@@ -233,7 +246,6 @@ function main() {
 
         function quoteGenerator() {
             var url = "https://andruxnet-random-famous-quotes.p.mashape.com/?cat=famous&count=1";
-
 
             $.ajax({
                 url: url,
@@ -251,6 +263,7 @@ function main() {
             });
         }
 
+        //if you're not new, go ahead and make the calls
         if (currentUser.newUser === false) {
             updateArrivals();
             updateWeather();
