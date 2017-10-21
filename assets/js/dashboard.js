@@ -6,23 +6,23 @@ const validZips = ["60007", "60018", "60068", "60076", "60077", "60106", "60131"
 
 
 
-const config = {
-    apiKey: "AIzaSyBoDzxA09zepIWCD9INLvERA63qHwd_oZ4",
-    authDomain: "ct-ace.firebaseapp.com",
-    databaseURL: "https://ct-ace.firebaseio.com",
-    projectId: "ct-ace",
-    storageBucket: "ct-ace.appspot.com",
-    messagingSenderId: "310061683501"
-}; //Mike's firebase
-
 // const config = {
-//     apiKey: "AIzaSyCivRfgDQux9l4K9QGWsNuMnDy-zD0QAaw",
-//     authDomain: "cta-dash.firebaseapp.com",
-//     databaseURL: "https://cta-dash.firebaseio.com",
-//     projectId: "cta-dash",
-//     storageBucket: "",
-//     messagingSenderId: "195672621360"
-//   };//Dennis' firebase
+//     apiKey: "AIzaSyBoDzxA09zepIWCD9INLvERA63qHwd_oZ4",
+//     authDomain: "ct-ace.firebaseapp.com",
+//     databaseURL: "https://ct-ace.firebaseio.com",
+//     projectId: "ct-ace",
+//     storageBucket: "ct-ace.appspot.com",
+//     messagingSenderId: "310061683501"
+// }; //Mike's firebase
+
+const config = {
+    apiKey: "AIzaSyCivRfgDQux9l4K9QGWsNuMnDy-zD0QAaw",
+    authDomain: "cta-dash.firebaseapp.com",
+    databaseURL: "https://cta-dash.firebaseio.com",
+    projectId: "cta-dash",
+    storageBucket: "",
+    messagingSenderId: "195672621360"
+  };//Dennis' firebase
 
 firebase.initializeApp(config);
 
@@ -136,6 +136,8 @@ function main() {
             e.preventDefault();
             if (validZips.indexOf($("#zipCode").val()) > -1) {
                 userPreferences.zipCode = $("#zipCode").val();
+                console.log('userPreferences', userPreferences);
+
                 //add code to modify display name here?
                 //ask if they want to use default? 
                 collectBusData();
