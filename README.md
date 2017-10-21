@@ -1,3 +1,4 @@
+<div style = "background-color: #2A5B8D; color: white;">
 
 ![CTA-Dash Logo](assets/images/ctaDash.png)
 Format: ![CTA Dash](url)
@@ -55,3 +56,5 @@ We are in the process of adding new features to the application.
 * **Dennis Hodges** - [fermentationist](https://github.com/fermentationist)
 * **Nadia N-M** - [nadianm](https://github.com/nadianm)
 * **Ryan Kim** - [roverkim](https://github.com/roverkim)
+
+</div>
